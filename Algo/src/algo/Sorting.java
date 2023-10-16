@@ -41,7 +41,9 @@ public class Sorting {
 		}
 		else if (userInput.equals("3"))
 		{
-			QuickSort(arr);
+			int Low = 0;
+			int High = arr.length - 1;
+			QuickSort(arr, Low, High);
 		}
 		else if (userInput.equals("4"))
 		{
@@ -87,15 +89,81 @@ public class Sorting {
 	        }
 	}
 	
-	public static void QuickSort(int[] arr)
+	public static void QuickSort(int[] arr, int Low, int High)
 	{
-		
+		if (Low < High) {
+            int pivotIndex = Partitioning(arr, Low, High);
+            Printer(arr);
+            QuickSort(arr, Low, pivotIndex - 1);
+            QuickSort(arr, pivotIndex + 1, High);
+        }
 	}
+	
+	public static int Partitioning(int[] arr, int Low, int High) {
+        int pivot = arr[High];
+        int i = Low - 1;
+        for (int j = Low; j < High; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[High];
+        arr[High] = temp;
+        Printer(arr);
+        return i + 1;
+    }
 	
 	public static void MergeSort(int[] arr)
 	{
-		
+		Printer(arr);
+		int n = arr.length;
+        if (n > 1) {
+            int mid = n / 2;
+            int[] left = new int[mid];
+            int[] right = new int[n - mid];
+
+            System.arraycopy(arr, 0, left, 0, mid);
+            System.arraycopy(arr, mid, right, 0, n - mid);
+
+            MergeSort(left);
+            MergeSort(right);
+
+            Merge(arr, left, right);
+            Printer(arr);
+        }
 	}
+	public static void Merge(int[] arr, int[] left, int[] right) {
+        int LeftNode = left.length;
+        int RightNode = right.length;
+        int i = 0, j = 0, k = 0;
+
+        while (i < LeftNode && j < RightNode) {
+            if (left[i] <= right[j]) {
+                arr[k] = left[i];
+                i++;
+            } else {
+                arr[k] = right[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < LeftNode) {
+            arr[k] = left[i];
+            i++;
+            k++;
+        }
+
+        while (j < RightNode) {
+            arr[k] = right[j];
+            j++;
+            k++;
+        }
+    }
 	
 	public static void Printer(int[] arr)
 	{
